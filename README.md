@@ -1,6 +1,6 @@
-# Turma: Santander Coders - Turma 1111
+Turma: Santander Coders - Turma 1111
 
-## Professor: Alex Araujo
+Professor: Alex Araujo
 
-## Alunos:
-Rafael Santos Isidro - Presente
+Alunos:
+Rafael Santos Isidro
