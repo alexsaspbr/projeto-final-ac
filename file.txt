@@ -1,3 +1,5 @@
-Alex Araujo
-Santander Coders - Turma 1111
-Santander Coders - Turma 1111 - v2
+Turma: Santander Coders - Turma 1111
+
+Professor: Alex Araujo
+
+Aluno: Davi Costa Junior
