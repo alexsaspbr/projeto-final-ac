@@ -2,7 +2,8 @@
 
 ## Professor: Alex Araujo
 
-## Alunos:
+## Alunos: 
 
+Wagner Costa Thomazini  - Presente </br>
 Pedro Antonio Souza  - Presente </br>
 Rafael Santos Isidro - Presente </br>
