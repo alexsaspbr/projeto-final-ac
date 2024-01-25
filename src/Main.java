@@ -7,5 +7,13 @@ public class Main {
         Agenda agenda = new Agenda();
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("##################\n" +
+                "##### AGENDA #####\n" +
+                "##################\n");
+
+        MenuAgenda menuAgenda = new MenuAgenda();
+        menuAgenda.exibirMenu();
+
+
     }
 }

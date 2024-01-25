@@ -7,8 +7,15 @@ public class Agenda {
         contatos = new HashMap<>();
     }
 
-    public void adicionarContato(Contato contato) {
-        // Implementar verificação de ID único e adição
+    public Long adicionarContato(Contato contato) {
+        try {
+            contato.setId(++ultimoId);
+            contatos.put(contato.getId(), contato);
+            return contato.getId();
+        } catch (Exception e) {
+            System.err.println("Erro ao adicionar contato: " + e.getMessage());
+            return null; // Retorna null em caso de falha
+        }
     }
 
     public void removerContato(Long id) {
