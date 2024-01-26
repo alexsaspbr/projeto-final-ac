@@ -7,10 +7,6 @@ import java.util.Scanner;
 
 public class Agenda {
 
-    // TODO [X] - ID DO Telefone sequencial e diferente do id do contato - OK
-    // TODO [X] - Um contato pode ter mais de um telefone - OK
-    // TODO [ ] - Implementar serialização nos ids
-
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -36,7 +32,7 @@ public class Agenda {
 
     public static void showContato(String contato) {
         String[] contatoString = contato.split("-");
-        System.out.println(String.format("%s - %s %s", contatoString[0].replace("C", ""), contatoString[1], contatoString[2]));
+        System.out.println(String.format("%s - %s %s", contatoString[0], contatoString[1], contatoString[2]));
     }
 
     private static void showMenu() {
@@ -63,19 +59,15 @@ public class Agenda {
 
     private static void adicionarContato() {
         Contato contato = new Contato();
-        System.out.println("\nDigite o primeiro nome do contato: ");
-        contato.setNome(scanner.nextLine());
-        System.out.println("\nDigite o sobrenome do contato: ");
-        contato.setSobrenome(scanner.nextLine());
-        System.out.println("\nDigite o ddd: ");
-        String ddd = scanner.nextLine();
-        System.out.println("\nDigite o numero: ");
-        String numero = scanner.nextLine();
-
-        Telefone telefone = new Telefone(contato.getId(), ddd, numero);
+        Telefone telefone = setDados(contato);
 
         contato.setTelefone(telefone);
         contato.addContatoETelefone(telefone);
+        continuarAdicionando(contato);
+        showAgenda();
+    }
+
+    private static void continuarAdicionando(Contato contato) {
         boolean continuarAdd = true;
         while (continuarAdd) {
             System.out.println("Deseja adicionar mais um numero para esse contato? (1 - SIM | 2 - NÃO) ");
@@ -90,8 +82,8 @@ public class Agenda {
                     System.out.println("\nDigite o numero: ");
                     String numeroNew = scanner.nextLine();
 
-                    Telefone telefoneNew = new Telefone(contato.getId(), dddNew, numeroNew);
-                    contato.addTelefone(telefoneNew);
+                    Telefone novoTelefone = new Telefone(contato.getId(), dddNew, numeroNew);
+                    contato.addTelefone(novoTelefone);
                     break;
                 }
                 case 2:
@@ -102,17 +94,42 @@ public class Agenda {
                     showMenu();
             }
         }
-        showAgenda();
+    }
+
+    private static Telefone setDados(Contato contato) {
+        System.out.println("\nDigite o primeiro nome do contato: ");
+        contato.setNome(scanner.nextLine());
+        System.out.println("\nDigite o sobrenome do contato: ");
+        contato.setSobrenome(scanner.nextLine());
+        System.out.println("\nDigite o ddd: ");
+        String ddd = scanner.nextLine();
+        System.out.println("\nDigite o numero: ");
+        String numero = scanner.nextLine();
+
+        Telefone telefone = new Telefone(contato.getId(), ddd, numero);
+        return telefone;
     }
 
     private static void editarContato() {
+        Contato contato = new Contato();
+        Telefone telefone = setDados(contato);
+
+        contato.setTelefone(telefone);
+        Long id = getIdContato();
+        contato.editarContato(id, telefone);
+
     }
 
     private static void removerContato() {
+        Long id = getIdContato();
+        Contato contato = new Contato();
+        contato.removerContato(id);
+        showAgenda();
     }
 
     private static Long getIdContato() {
         System.out.println("\nDigite o Id do contato: ");
-        return Long.parseLong(scanner.nextLine());
+        Long id = Long.parseLong(scanner.nextLine());
+        return id;
     }
 }

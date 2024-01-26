@@ -28,11 +28,14 @@ public class Contato {
     public void addTelefone(Telefone telefone) {
         try {
             List<String> telefones = getTelefones();
-            Long idTelefone = (telefones.size() > 0) ? Long.parseLong(telefones.get(telefones.size() - 1).split("-")[1].replace("T", "")) + 1 : 1L;
-
             FileWriter filewriter = new FileWriter(fileTelefones, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(filewriter);
+            Long idTelefone = (telefones.size() > 0) ? Long.parseLong(telefones.get(telefones.size() - 1).split("-")[1].replace("T", "")) + 1 : 1;
+
             String linhaTelefone = String.format("C%s-T%s-%s-%s", this.id, idTelefone.toString(), telefone.getDdd(), telefone.getNumero());
-            escreverDados(filewriter, linhaTelefone);
+            escreverDados(bufferedWriter, linhaTelefone);
+            bufferedWriter.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -40,20 +43,20 @@ public class Contato {
 
     private void addContato() {
         try {
-            FileWriter filewriter = new FileWriter(fileContatos, true);
+            FileWriter fileWriterContatos = new FileWriter(fileContatos, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriterContatos);
             String linhaContato = String.format("%s-%s-%s", this.id.toString(), this.nome, this.sobrenome);
-            escreverDados(filewriter, linhaContato);
+            escreverDados(bufferedWriter, linhaContato);
+            bufferedWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void escreverDados(FileWriter filewriter, String linhaTelefone) {
+    private static void escreverDados(BufferedWriter bufferedWriter, String linhaTelefone) {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(filewriter);
             bufferedWriter.write(linhaTelefone);
             bufferedWriter.newLine();
-            bufferedWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,7 +72,8 @@ public class Contato {
             while ((line = bufferedReader.readLine()) != null) {
                 contatos.add(line);
             }
-            arquivo.close();
+            bufferedReader.close();
+
             return contatos;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -80,7 +84,6 @@ public class Contato {
         try {
             FileReader arquivo = new FileReader(fileTelefones);
             BufferedReader bufferedReader = new BufferedReader(arquivo);
-
             String line;
             List<String> telefones = new ArrayList<>();
             while ((line = bufferedReader.readLine()) != null) {
@@ -109,9 +112,27 @@ public class Contato {
         return id;
     }
 
-    public void updateContato(Long id, String ddd, String numero) {
+    public void editarContato(Long id, Telefone telefone) {
     }
 
-    public void removerContato(Long id) {
+    public void removerContato(Long idContato) {
+        try {
+            List<String> contatos = getContatos();
+
+            FileWriter fileWriterContatos = new FileWriter(fileContatos, false);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriterContatos);
+
+            contatos.stream()
+                    .filter(line -> Long.parseLong(line.split("-")[0]) != idContato)
+                    .forEach(line -> {
+                        String linhaContato = String.format("%s-%s-%s", line.split("-")[0], line.split("-")[1], line.split("-")[2]);
+                        escreverDados(bufferedWriter, linhaContato);
+                    });
+
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
