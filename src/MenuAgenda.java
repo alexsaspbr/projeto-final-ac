@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuAgenda {
@@ -22,7 +24,14 @@ public class MenuAgenda {
             System.out.println("4 - Sair");
             System.out.print("Escolha uma opção: ");
 
-            int escolha = scanner.nextInt();
+            int escolha;
+            try {
+                escolha = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, insira um número válido.");
+                continue;
+            }
+
             processarEscolha(escolha);
         }
     }
@@ -53,9 +62,26 @@ public class MenuAgenda {
         System.out.println(">>>> Adicionar Contato <<<<");
 
         String nome = validacaoNome("Digite o nome: ");
+
         String sobrenome = validacaoNome("Digite o sobrenome: ");
 
-        // Se necessário, adicione lógica para capturar números de telefone
+        // Lógica para adicionar telefone
+        List<Telefone> telefones = new ArrayList<>();
+        boolean adicionarMais = true;
+        while (adicionarMais) {
+            Telefone telefone = new Telefone();
+
+            // adiciona o DDD e verifica se é valido: apenas numeros com 2 algarismos
+            telefone.setDdd(validarEntradaTelefone("DDD", 2, 2));
+
+            // adiciona o numero e verifica se é valido: apenas numeros entre 8 e 9 algarismos
+            telefone.setNumero(Long.parseLong(validarEntradaTelefone("Número de telefone", 8, 9)));
+
+            telefones.add(telefone);
+
+            System.out.print("Deseja adicionar mais um telefone? (s/n): ");
+            adicionarMais = scanner.nextLine().trim().equalsIgnoreCase("s");
+        }
 
         Contato novoContato = new Contato();
         novoContato.setNome(nome);
@@ -86,6 +112,19 @@ public class MenuAgenda {
                 System.out.println("Entrada inválida. Por favor, use apenas letras e mais de um caractere.");
             }
         } while (!entrada.matches("^[A-Za-z]+$") || entrada.length() <= 1);
+
+        return entrada;
+    }
+
+    private String validarEntradaTelefone (String tipo, int minLen, int maxLen) {
+        String entrada;
+        do {
+            System.out.print("Digite o " + tipo + ": ");
+            entrada = scanner.nextLine();
+            if (!entrada.matches("\\d{" + minLen + "," + maxLen + "}")) {
+                System.out.println("Entrada inválida. Por favor, insira apenas números com " + minLen + " a " + maxLen + " dígitos.");
+            }
+        } while (!entrada.matches("\\d{" + minLen + "," + maxLen + "}"));
 
         return entrada;
     }
