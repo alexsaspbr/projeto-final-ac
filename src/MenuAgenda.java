@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -70,12 +69,10 @@ public class MenuAgenda {
     }
 
     private void menuAdicionarContato() {
-
         boolean continuarAdicionarContato = true;
 
         while (continuarAdicionarContato) {
-            System.out.println("");
-            System.out.println(">>>> Adicionar Contato <<<<");
+            System.out.println("\n>>>> Adicionar Contato <<<<");
 
             String nome = validacaoNome("Digite o nome: ");
             String sobrenome = validacaoNome("Digite o sobrenome: ");
@@ -86,42 +83,26 @@ public class MenuAgenda {
                 String resposta = scanner.nextLine().trim();
                 if (!resposta.equalsIgnoreCase("s")) {
                     continuarAdicionarContato = false;
-                                    }
+                }
             } else {
-                List<Telefone> telefones = new ArrayList<>();
+                Contato novoContato = new Contato();
+                novoContato.setNome(nome);
+                novoContato.setSobreNome(sobrenome);
+
                 boolean adicionarMais = true;
                 while (adicionarMais) {
-                    Telefone telefone = new Telefone();
-                    telefone.setDdd(validarEntradaTelefone("DDD", 2, 2));
-                    long numeroTelefone = Long.parseLong(validarEntradaTelefone("Número de telefone", 8, 9));
-                    telefone.setNumero(numeroTelefone);  // Atribuir o número antes de verificar
-
-                    // Primeiro, verificar se o número já existe na agenda
-                    if (agenda.telefoneExiste(telefone)) {
-                        System.out.print("Um contato com esse número de telefone já existe na agenda, deseja tentar outro número? (s/n): ");
-                        adicionarMais = scanner.nextLine().trim().equalsIgnoreCase("s");
-                        continue;
+                    Telefone novoTelefone = adicionarNovoTelefone(novoContato);
+                    if (novoTelefone == null) {
+                        break; // Interrompe o loop se o usuário decidir não tentar adicionar outro número
                     }
 
-                    // Agora, verificar se o número já foi adicionado ao contato atual
-                    if (telefones.stream().anyMatch(t -> t.getNumero().equals(numeroTelefone))) {
-                        System.out.print("Este número de telefone já foi adicionado a este contato, deseja tentar outro número? (s/n): ");
-                        adicionarMais = scanner.nextLine().trim().equalsIgnoreCase("s");
-                        continue;
-                    }
-
-                    telefones.add(telefone);  // Adicionar o telefone se passar nas verificações
+                    novoContato.getTelefones().add(novoTelefone);
 
                     System.out.print("Deseja adicionar mais um telefone? (s/n): ");
                     adicionarMais = scanner.nextLine().trim().equalsIgnoreCase("s");
                 }
 
-                if (!telefones.isEmpty()) {
-                    Contato novoContato = new Contato();
-                    novoContato.setNome(nome);
-                    novoContato.setSobreNome(sobrenome);
-                    novoContato.setTelefones(telefones);
-
+                if (!novoContato.getTelefones().isEmpty()) {
                     agenda.adicionarContato(novoContato);
                     System.out.println("Contato adicionado com sucesso!");
                 }
@@ -129,6 +110,7 @@ public class MenuAgenda {
             }
         }
     }
+
 
     private void menuRemoverContato() {
         System.out.print("Digite o ID do contato a ser removido: ");
@@ -220,13 +202,17 @@ public class MenuAgenda {
 
             switch (escolha) {
                 case 1:
-                    // Implementar lógica para adicionar novo telefone
+                    Telefone novoTelefone = adicionarNovoTelefone(contato);
+                    if (novoTelefone != null) {
+                        contato.getTelefones().add(novoTelefone);
+                        System.out.println("Telefone adicionado com sucesso.");
+                    }
                     break;
                 case 2:
-                    // Implementar lógica para remover um telefone
+                    removerTelefone(contato);
                     break;
                 case 3:
-                    // Implementar lógica para alterar um telefone
+                    alterarTelefone(contato);
                     break;
                 case 4:
                     continuarEdicao = false;
@@ -237,7 +223,6 @@ public class MenuAgenda {
             }
         }
     }
-
 
     // Métodos de validação
     private String validacaoNome(String mensagem) {
@@ -264,6 +249,93 @@ public class MenuAgenda {
         } while (!entrada.matches("\\d{" + minLen + "," + maxLen + "}"));
 
         return entrada;
+    }
+
+    private Telefone adicionarNovoTelefone(Contato contato) {
+        System.out.println("Adicionando novo telefone para: " + contato.getNome() + " " + contato.getSobreNome());
+
+        while (true) {
+            String ddd = validarEntradaTelefone("Digite o DDD", 2, 2);
+            String numero = validarEntradaTelefone("Digite o número do telefone", 8, 9);
+
+            Telefone novoTelefone = new Telefone();
+            novoTelefone.setDdd(ddd);
+            novoTelefone.setNumero(Long.parseLong(numero));
+
+            if (contato.getTelefones().stream().anyMatch(t -> t.getNumero().equals(novoTelefone.getNumero())) || agenda.telefoneExiste(novoTelefone)) {
+                System.out.println("Este número de telefone já existe.");
+                System.out.print("Deseja tentar adicionar outro número? (s/n): ");
+                if (!scanner.nextLine().trim().equalsIgnoreCase("s")) {
+                    return null; // Retorna null para indicar que não deve tentar adicionar mais telefones
+                }
+            } else {
+                return novoTelefone; // Retorna o telefone válido adicionado
+            }
+        }
+    }
+
+    private void removerTelefone(Contato contato) {
+        if (contato.getTelefones().isEmpty()) {
+            System.out.println("Não há telefones para remover neste contato.");
+            return;
+        }
+
+        System.out.println("Selecione o telefone para remover:");
+        for (int i = 0; i < contato.getTelefones().size(); i++) {
+            Telefone tel = contato.getTelefones().get(i);
+            System.out.println((i + 1) + " - DDD: " + tel.getDdd() + ", Número: " + tel.getNumero());
+        }
+
+        System.out.print("Escolha um número (ou 0 para cancelar): ");
+        int escolha;
+        try {
+            escolha = Integer.parseInt(scanner.nextLine()) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, insira um número válido.");
+            return;
+        }
+
+        if (escolha >= 0 && escolha < contato.getTelefones().size()) {
+            contato.getTelefones().remove(escolha);
+            System.out.println("Telefone removido com sucesso.");
+        } else if (escolha != -1) {
+            System.out.println("Seleção inválida.");
+        }
+    }
+
+    private void alterarTelefone(Contato contato) {
+        if (contato.getTelefones().isEmpty()) {
+            System.out.println("Não há telefones para alterar neste contato.");
+            return;
+        }
+
+        System.out.println("Selecione o telefone para alterar:");
+        for (int i = 0; i < contato.getTelefones().size(); i++) {
+            Telefone tel = contato.getTelefones().get(i);
+            System.out.println((i + 1) + " - DDD: " + tel.getDdd() + ", Número: " + tel.getNumero());
+        }
+
+        System.out.print("Escolha um número (ou 0 para cancelar): ");
+        int escolha;
+        try {
+            escolha = Integer.parseInt(scanner.nextLine()) - 1;
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, insira um número válido.");
+            return;
+        }
+
+        if (escolha >= 0 && escolha < contato.getTelefones().size()) {
+            Telefone telefoneSelecionado = contato.getTelefones().get(escolha);
+
+            String novoDdd = validarEntradaTelefone("Digite o novo DDD", 2, 2);
+            String novoNumero = validarEntradaTelefone("Digite o novo número do telefone", 8, 9);
+
+            telefoneSelecionado.setDdd(novoDdd);
+            telefoneSelecionado.setNumero(Long.parseLong(novoNumero));
+            System.out.println("Telefone alterado com sucesso.");
+        } else if (escolha != -1) {
+            System.out.println("Seleção inválida.");
+        }
     }
 
 }
