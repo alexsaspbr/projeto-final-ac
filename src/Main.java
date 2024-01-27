@@ -12,7 +12,10 @@ public class Main {
                 "##################\n");
 
         MenuAgenda menuAgenda = new MenuAgenda();
+
         menuAgenda.exibirMenu();
+
+
 
 
     }

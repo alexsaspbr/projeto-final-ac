@@ -31,5 +31,9 @@ public class Telefone {
 
     //endregion
 
+    @Override
+    public String toString() {
+        return "(" + ddd + ")" + numero;
+    }
 
 }

@@ -1,10 +1,13 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Contato {
     private long id;
     private String nome;
     private String sobreNome;
     private List<Telefone> telefones;
+
 
     //region Getters and Setters
     public long getId() {
@@ -35,10 +38,20 @@ public class Contato {
         return telefones;
     }
 
+
     public void setTelefones(List<Telefone> telefones) {
         this.telefones = telefones;
     }
     //endregion
 
+    public Contato() {
+        telefones = new ArrayList<>();
+    }
+
+    public String getTelefonesFormatados() {
+        return telefones.stream()
+                .map(t -> "(" + t.getDdd() + ")" + t.getNumero())
+                .collect(Collectors.joining(", "));
+    }
 
 }

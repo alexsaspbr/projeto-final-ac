@@ -7,6 +7,7 @@ public class Agenda {
         contatos = new HashMap<>();
     }
 
+
     public Long adicionarContato(Contato contato) {
         try {
             contato.setId(++ultimoId);
@@ -18,18 +19,54 @@ public class Agenda {
         }
     }
 
-    public void removerContato(Long id) {
-        // Implementar remoção
+    public boolean removerContato(Long id) {
+        if (contatos.containsKey(id)) {
+            contatos.remove(id);
+            return true; // Contato removido com sucesso
+        }
+        return false; // Contato não encontrado
     }
 
-    public void editarContato(Long id, Contato novoContato) {
-        // Implementar edição
+    public boolean editarContato(Long id, Contato contatoAtualizado) {
+        if (contatos.containsKey(id)) {
+            contatos.put(id, contatoAtualizado);
+            return true; // Contato atualizado com sucesso
+        }
+        return false; // Contato não encontrado
     }
 
     public List<Contato> listarContatos() {
         // Retorna lista de contatos
-        return null;
+        return new ArrayList<>(contatos.values());
     }
 
     // Métodos auxiliares...
+
+    public boolean existeContato(String nome, String sobrenome) {
+        for (Contato contato : contatos.values()) {
+            if (contato.getNome().equalsIgnoreCase(nome) && contato.getSobreNome().equalsIgnoreCase(sobrenome)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean telefoneExiste(Telefone telefone) {
+        for (Contato contato : contatos.values()) {
+            List<Telefone> telefonesDoContato = contato.getTelefones();
+            if (telefonesDoContato != null) {
+                for (Telefone tel : telefonesDoContato) {
+                    if (tel.getNumero().equals(telefone.getNumero())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public Map<Long, Contato> getContatos() {
+        return contatos;
+    }
+
 }
