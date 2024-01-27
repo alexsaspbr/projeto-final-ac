@@ -20,12 +20,12 @@ public class Contato {
         this.id = (contatos.size() > 0) ? Long.parseLong(contatos.get(contatos.size() - 1).split("-")[0].replace("C", "")) + 1 : 1L;
     }
 
-    public void addContatoETelefone(Telefone telefone) {
+    public void adicionarContatoETelefone(Telefone telefone) {
         addContato();
-        addTelefone(telefone);
+        adicionarNovoTelefone(telefone);
     }
 
-    public void addTelefone(Telefone telefone) {
+    public void adicionarNovoTelefone(Telefone telefone) {
         try {
             List<String> telefones = getTelefones();
             FileWriter filewriter = new FileWriter(fileTelefones, true);
@@ -113,6 +113,9 @@ public class Contato {
     }
 
     public void editarContato(Long id, Telefone telefone) {
+    }
+
+    public void editarContato(Long id, Telefone telefone, Long idTelefone) {
     }
 
     public void removerContato(Long idContato) {
