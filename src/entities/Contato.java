@@ -7,16 +7,16 @@ import java.util.List;
 public class Contato {
 
     private Long id;
-    private static List<Telefone> telefones = new ArrayList<>();
-    private static File fileContatos = new File("src/contatos.txt");
-    private static File fileTelefones = new File("src/telefones.txt");
     private String nome;
     private String sobrenome;
+
+    private static List<Telefone> telefones = new ArrayList<>();
+    private static final File fileContatos = new File("src/contatos.txt");
+    private static final File fileTelefones = new File("src/telefones.txt");
 
 
     public Contato() {
         List<String> contatos = getContatos();
-
         this.id = (contatos.size() > 0) ? Long.parseLong(contatos.get(contatos.size() - 1).split("-")[0].replace("C", "")) + 1 : 1L;
     }
 
@@ -35,7 +35,6 @@ public class Contato {
             String linhaTelefone = String.format("C%s-T%s-%s-%s", this.id, idTelefone.toString(), telefone.getDdd(), telefone.getNumero());
             escreverDados(bufferedWriter, linhaTelefone);
             bufferedWriter.close();
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

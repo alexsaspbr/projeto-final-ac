@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Agenda {
 
-    public static Scanner scanner = new Scanner(System.in);
+    public static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         mostrarAgenda();
@@ -73,7 +73,7 @@ public class Agenda {
             int option = scanner.nextInt();
 
             switch (option) {
-                case 1: {
+                case 1 -> {
                     scanner.nextLine();
                     System.out.println("\nDigite o ddd: ");
                     String dddNovo = scanner.nextLine();
@@ -85,12 +85,11 @@ public class Agenda {
                     contato.adicionarNovoTelefone(novoTelefone);
                     break;
                 }
-                case 2:
-                    continuar = false;
-                    break;
-                default:
+                case 2 -> continuar = false;
+                default -> {
                     System.out.println("Opção inválida. Digite novamente.");
                     mostrarMenu();
+                }
             }
         }
     }
@@ -113,7 +112,7 @@ public class Agenda {
         Contato contato = new Contato();
         Telefone telefone = armazenarDados(contato);
 
-        System.out.println("\nDigite o Id do contato: ");
+        System.out.println("\nDigite o Id do contato que deseja editar: ");
         Long id = getIdContatoTelefone();
 
         contato.setTelefone(telefone);
@@ -125,24 +124,25 @@ public class Agenda {
             int option = scanner.nextInt();
 
             switch (option) {
-                case 1:
+                case 1 -> {
                     continuar = false;
-                    System.out.println("\nDigite o Id do telefone: ");
+                    System.out.println("\nDigite o Id do telefone que deseja editar: ");
                     Long idTelefone = getIdContatoTelefone();
                     contato.editarContato(id, telefone, idTelefone);
                     break;
-                case 2: {
+                }
+                case 2 -> {
                     continuar = false;
                     contato.editarContato(id, telefone);
                     break;
                 }
-                default:
-                    System.out.println("Opção inválida. Digite novamente.");
+                default -> System.out.println("Opção inválida. Digite novamente.");
             }
         }
     }
 
     private static void removerContato() {
+        System.out.println("\nDigite o Id do contato que deseja remover: ");
         Long id = getIdContatoTelefone();
         Contato contato = new Contato();
         contato.removerContato(id);
@@ -150,8 +150,7 @@ public class Agenda {
     }
 
     private static Long getIdContatoTelefone() {
-        Long id = Long.parseLong(scanner.nextLine());
-        return id;
+        return Long.parseLong(scanner.nextLine());
     }
 
 }
