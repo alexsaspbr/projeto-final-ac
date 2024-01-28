@@ -3,6 +3,7 @@ package application;
 import entities.Contato;
 import entities.Telefone;
 
+import java.util.List;
 import java.util.Scanner;
 
 // PROJETO: Lógica de Programação I - Agenda de Contatos
@@ -84,6 +85,18 @@ public class Agenda {
                     System.out.println("\nDigite o numero: ");
                     String numeroNovo = scanner.nextLine();
 
+                    List<String> telefones = Contato.getTelefones();
+
+                    boolean dddExistente = telefones.stream()
+                            .anyMatch(line -> line.split("-")[2].equals(dddNovo));
+                    boolean numeroExistente = telefones.stream()
+                            .anyMatch(line -> line.split("-")[3].equals(numeroNovo));
+
+                    if (dddExistente && numeroExistente) {
+                        System.out.println("Esse número já está cadastrado, tente novamente.");
+                        mostrarMenu();
+                    }
+
                     Telefone novoTelefone = new Telefone(id, dddNovo, numeroNovo);
                     Contato.adicionarNovoTelefone(novoTelefone, id);
                 }
@@ -131,7 +144,7 @@ public class Agenda {
         mostrarAgenda();
     }
 
-    private static Telefone armazenarDados(Contato contato, Long id) {
+    private static Telefone armazenarDados(Contato contato, Long idInserido) {
         System.out.println("\nDigite o primeiro nome do contato: ");
         contato.setNome(scanner.nextLine());
         System.out.println("\nDigite o sobrenome do contato: ");
@@ -141,7 +154,25 @@ public class Agenda {
         System.out.println("\nDigite o numero: ");
         String numero = scanner.nextLine();
 
-        Telefone telefone = new Telefone(id, ddd, numero);
+        List<String> telefones = Contato.getTelefones();
+        boolean telefoneExistente = false;
+
+        // Verifica se o telefone é único e, na edição, se existente, pertence ao contato a ser editado
+        if (telefones.stream().anyMatch(
+                line -> !String.valueOf(idInserido).equals(line.split("-")[0].replace("C", ""))
+                        && ddd.equals(line.split("-")[2])
+                        && numero.equals(line.split("-")[3]))) {
+            telefoneExistente = true;
+        }
+
+        if (telefoneExistente) {
+            System.out.println("Esse número já está cadastrado.");
+            mostrarMenu();
+        }
+
+        Telefone telefone = new Telefone(idInserido, ddd, numero);
+
         return telefone;
     }
+
 }
