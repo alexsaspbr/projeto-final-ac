@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 public class Telefone {
 
     private Long id;
@@ -20,11 +22,11 @@ public class Telefone {
         return numero;
     }
 
-    public Long getId() {
-        return this.id;
+    public void setId(List<String> telefones) {
+        this.id = (telefones.size() > 0) ? Long.parseLong(telefones.get(telefones.size() - 1).split("-")[1].replace("T", "")) + 1 : 1;
     }
 
-    public String getTelefone() {
-        return this.ddd + this.numero.toString();
+    public Long getId() {
+        return this.id;
     }
 }

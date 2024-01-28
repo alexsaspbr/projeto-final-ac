@@ -13,7 +13,7 @@ public class Agenda {
         mostrarAgenda();
     }
 
-    private static void mostrarAgenda() {
+    public static void mostrarAgenda() {
         System.out.println("##################");
         System.out.println("######AGENDA######");
         System.out.println("##################\n\n");
@@ -34,7 +34,7 @@ public class Agenda {
         System.out.println(String.format("%s - %s %s", contatoString[0], contatoString[1], contatoString[2]));
     }
 
-    private static void mostrarMenu() {
+    public static void mostrarMenu() {
         System.out.println(">>>> Menu <<<<");
         System.out.println("1 - Adicionar Contato");
         System.out.println("2 - Remover Contato");
@@ -48,7 +48,9 @@ public class Agenda {
             case 1 -> adicionarContato();
             case 2 -> removerContato();
             case 3 -> editarContato();
-            case 4 -> scanner.close();
+            case 4 -> {
+                scanner.close();
+            }
             default -> {
                 System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                 mostrarMenu();
@@ -58,15 +60,16 @@ public class Agenda {
 
     private static void adicionarContato() {
         Contato contato = new Contato();
-        Telefone telefone = armazenarDados(contato);
+        Telefone telefone = armazenarDados(contato, contato.getId());
 
         contato.setTelefone(telefone);
         contato.adicionarContatoETelefone(telefone);
-        continuarAdicionando(contato);
+
+        continuarAdicionando(contato.getId());
         mostrarAgenda();
     }
 
-    private static void continuarAdicionando(Contato contato) {
+    private static void continuarAdicionando(Long id) {
         boolean continuar = true;
         while (continuar) {
             System.out.println("Deseja adicionar mais um numero para esse contato? (1 - SIM | 2 - NÃO) ");
@@ -81,11 +84,12 @@ public class Agenda {
                     System.out.println("\nDigite o numero: ");
                     String numeroNovo = scanner.nextLine();
 
-                    Telefone novoTelefone = new Telefone(contato.getId(), dddNovo, numeroNovo);
-                    contato.adicionarNovoTelefone(novoTelefone);
-                    break;
+                    Telefone novoTelefone = new Telefone(id, dddNovo, numeroNovo);
+                    Contato.adicionarNovoTelefone(novoTelefone, id);
                 }
-                case 2 -> continuar = false;
+                case 2 -> {
+                    continuar = false;
+                }
                 default -> {
                     System.out.println("Opção inválida. Digite novamente.");
                     mostrarMenu();
@@ -94,7 +98,41 @@ public class Agenda {
         }
     }
 
-    private static Telefone armazenarDados(Contato contato) {
+    private static void editarContato() {
+        Contato contato = new Contato();
+
+        System.out.println("\nDigite o Id do contato que deseja editar: ");
+        Long id = utilities.Contato.getIdInserido();
+        utilities.Contato.checarContatoExistente(contato, id);
+
+        Telefone telefone = armazenarDados(contato, id);
+
+        contato.setTelefone(telefone);
+        contato.editarContato(id, telefone);
+
+        continuarAdicionando(id);
+
+        System.out.println("\n-----Contato removido com sucesso!-----\n");
+
+        mostrarAgenda();
+    }
+
+    private static void removerContato() {
+        System.out.println("\nDigite o Id do contato que deseja remover: ");
+        Long idContato = utilities.Contato.getIdInserido();
+
+        Contato contato = new Contato();
+
+        utilities.Contato.checarContatoExistente(contato, idContato);
+
+        contato.removerContato(idContato);
+        scanner.nextLine();
+
+        System.out.println("\n-----Contato removido com sucesso!-----\n");
+        mostrarAgenda();
+    }
+
+    private static Telefone armazenarDados(Contato contato, Long id) {
         System.out.println("\nDigite o primeiro nome do contato: ");
         contato.setNome(scanner.nextLine());
         System.out.println("\nDigite o sobrenome do contato: ");
@@ -104,53 +142,7 @@ public class Agenda {
         System.out.println("\nDigite o numero: ");
         String numero = scanner.nextLine();
 
-        Telefone telefone = new Telefone(contato.getId(), ddd, numero);
+        Telefone telefone = new Telefone(id, ddd, numero);
         return telefone;
     }
-
-    private static void editarContato() {
-        Contato contato = new Contato();
-        Telefone telefone = armazenarDados(contato);
-
-        System.out.println("\nDigite o Id do contato que deseja editar: ");
-        Long id = getIdContatoTelefone();
-
-        contato.setTelefone(telefone);
-        scanner.nextLine();
-
-        boolean continuar = true;
-        while (continuar) {
-            System.out.println("Deseja editar algum telefone desse contato? (1 - SIM | 2 - NÃO)");
-            int option = scanner.nextInt();
-
-            switch (option) {
-                case 1 -> {
-                    continuar = false;
-                    System.out.println("\nDigite o Id do telefone que deseja editar: ");
-                    Long idTelefone = getIdContatoTelefone();
-                    contato.editarContato(id, telefone, idTelefone);
-                    break;
-                }
-                case 2 -> {
-                    continuar = false;
-                    contato.editarContato(id, telefone);
-                    break;
-                }
-                default -> System.out.println("Opção inválida. Digite novamente.");
-            }
-        }
-    }
-
-    private static void removerContato() {
-        System.out.println("\nDigite o Id do contato que deseja remover: ");
-        Long id = getIdContatoTelefone();
-        Contato contato = new Contato();
-        contato.removerContato(id);
-        mostrarAgenda();
-    }
-
-    private static Long getIdContatoTelefone() {
-        return Long.parseLong(scanner.nextLine());
-    }
-
 }
