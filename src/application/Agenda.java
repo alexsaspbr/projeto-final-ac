@@ -49,7 +49,7 @@ public class Agenda {
             case 2 -> removerContato();
             case 3 -> editarContato();
             case 4 -> {
-                scanner.close();
+                return;
             }
             default -> {
                 System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
@@ -126,7 +126,6 @@ public class Agenda {
         utilities.Contato.checarContatoExistente(contato, idContato);
 
         contato.removerContato(idContato);
-        scanner.nextLine();
 
         System.out.println("\n-----Contato removido com sucesso!-----\n");
         mostrarAgenda();
