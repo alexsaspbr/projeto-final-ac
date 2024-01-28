@@ -157,7 +157,6 @@ public class Agenda {
         List<String> telefones = Contato.getTelefones();
         boolean telefoneExistente = false;
 
-        // Verifica se o telefone é único e, na edição, se existente, pertence ao contato a ser editado
         if (telefones.stream().anyMatch(
                 line -> !String.valueOf(idInserido).equals(line.split("-")[0].replace("C", ""))
                         && ddd.equals(line.split("-")[2])
