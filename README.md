@@ -2,5 +2,5 @@
 
 ## Professor: Alex Araujo
 
-## Alunos:
-Rafael Santos Isidro - Presente
+## Aluno:
+Rafael Santos Isidro
