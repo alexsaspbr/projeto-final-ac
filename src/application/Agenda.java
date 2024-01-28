@@ -5,6 +5,8 @@ import entities.Telefone;
 
 import java.util.Scanner;
 
+// PROJETO: Lógica de Programação I - Agenda de Contatos
+// Rafael Santos Isidro
 public class Agenda {
 
     public static final Scanner scanner = new Scanner(System.in);
