@@ -41,8 +41,7 @@ public class Agenda {
         System.out.println("3 - Editar Contato");
         System.out.println("4 - Sair");
 
-        int option = scanner.nextInt();
-        scanner.nextLine();
+        int option = Integer.parseInt(scanner.nextLine());
 
         switch (option) {
             case 1 -> adicionarContato();
@@ -73,11 +72,10 @@ public class Agenda {
         boolean continuar = true;
         while (continuar) {
             System.out.println("Deseja adicionar mais um numero para esse contato? (1 - SIM | 2 - NÃO) ");
-            int option = scanner.nextInt();
+            int option = Integer.parseInt(scanner.nextLine());
 
             switch (option) {
                 case 1 -> {
-                    scanner.nextLine();
                     System.out.println("\nDigite o ddd: ");
                     String dddNovo = scanner.nextLine();
 
@@ -112,7 +110,7 @@ public class Agenda {
 
         continuarAdicionando(id);
 
-        System.out.println("\n-----Contato removido com sucesso!-----\n");
+        System.out.println("\n-----Contato editado com sucesso!-----\n");
 
         mostrarAgenda();
     }
