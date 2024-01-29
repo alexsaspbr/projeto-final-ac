@@ -48,6 +48,7 @@ public class Contato {
         telefones = new ArrayList<>();
     }
 
+    // Método para mostrar os telefones no menu ao lado no nome
     public String getTelefonesFormatados() {
         return telefones.stream()
                 .map(t -> "(" + t.getDdd() + ")" + t.getNumero())

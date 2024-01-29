@@ -19,6 +19,7 @@ public class Agenda {
         }
     }
 
+
     public boolean removerContato(Long id) {
         if (contatos.containsKey(id)) {
             contatos.remove(id);
@@ -71,6 +72,11 @@ public class Agenda {
 
     public Contato getContatoPorId(long id) {
         return contatos.get(id);
+    }
+
+    // método para pegar todos os contatos utilizado pelos metodos de escrita
+    public List<Contato> getTodosOsContatos() {
+        return new ArrayList<>(contatos.values());
     }
 
 }

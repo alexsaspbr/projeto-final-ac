@@ -1,11 +1,11 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
 
 public class GerenciadorDeArquivos {
     // Métodos para ler e escrever contatos e telefones em arquivos
 
+
+    //region Métodos de leitura
     public void carregarContatosDeArquivo(String caminhoArquivo, Agenda agenda) throws IOException {
         BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
         String linha;
@@ -48,4 +48,37 @@ public class GerenciadorDeArquivos {
         }
         leitor.close();
     }
+
+    //endregion
+
+    //region Métodos de escrita
+    public static void salvarContatosEmContatosTxt(String caminhoArquivo, Agenda agenda) throws IOException {
+        BufferedWriter escritor = new BufferedWriter(new FileWriter(caminhoArquivo));
+
+        for (Contato contato : agenda.getTodosOsContatos()) {
+            String linha = contato.getId() + "," + contato.getNome() + "," + contato.getSobreNome();
+            escritor.write(linha);
+            escritor.newLine();
+        }
+
+        escritor.close();
+    }
+
+    public static void salvarTelefonesEmTelefonesTxt(String caminhoArquivo, Agenda agenda) throws IOException {
+        BufferedWriter escritor = new BufferedWriter(new FileWriter(caminhoArquivo));
+
+        for (Contato contato : agenda.getTodosOsContatos()) {
+            for (Telefone tel : contato.getTelefones()) {
+                String linha = contato.getId() + "," + tel.getDdd() + "," + tel.getNumero();
+                escritor.write(linha);
+                escritor.newLine();
+            }
+        }
+
+        escritor.close();
+
+    }
+
+    //endregion
+
 }
