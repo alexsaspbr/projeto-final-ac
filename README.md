@@ -16,9 +16,13 @@ telefones de arquivos .txt, associando-os por um identificador único (ID).
 ## Funcionalidades
 
 Adicionar Contato: Permite a inclusão de novos contatos na agenda.
+
 Remover Contato: Remove um contato existente com base em seu ID.
+
 Editar Contato: Edita informações de um contato existente, como nome, sobrenome e telefones.
+
 Leitura de Arquivos: Carrega dados de contatos e telefones de dois arquivos .txt separados, onde um contém informações dos contatos e o outro, os respectivos telefones.
+
 Tratamento de Erros: Implementa gerenciamento de erros para garantir a robustez da aplicação.
 
 ## Estrutura dos Arquivos de Dados
