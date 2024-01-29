@@ -1,5 +1,6 @@
 package br.com.ada.tech.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +13,10 @@ public class Contato {
     private String sobreNome;
 
     private List<Telefone> telefones;
+
+    public Contato() {
+        this.telefones = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
