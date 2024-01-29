@@ -69,4 +69,8 @@ public class Agenda {
         return contatos;
     }
 
+    public Contato getContatoPorId(long id) {
+        return contatos.get(id);
+    }
+
 }

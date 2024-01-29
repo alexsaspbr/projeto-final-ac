@@ -1,14 +1,28 @@
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+
+
 public class MenuAgenda {
+
     private Agenda agenda;
     private Scanner scanner;
 
     public MenuAgenda() {
         agenda = new Agenda();
+
+        GerenciadorDeArquivos gerenciador = new GerenciadorDeArquivos();
+        try {
+            gerenciador.carregarContatosDeArquivo("resources/agenda.txt", agenda);
+            gerenciador.carregarTelefonesDeArquivo("resources/telefones.txt", agenda);
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+        }
+
         scanner = new Scanner(System.in);
     }
+
 
 
     public void exibirMenu() {

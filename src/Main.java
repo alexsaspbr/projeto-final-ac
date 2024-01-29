@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -14,9 +15,6 @@ public class Main {
         MenuAgenda menuAgenda = new MenuAgenda();
 
         menuAgenda.exibirMenu();
-
-
-
 
     }
 }
